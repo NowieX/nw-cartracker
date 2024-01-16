@@ -16,7 +16,7 @@ end
 
 RegisterNetEvent('esx:playerDropped', function(playerId, reason)
     unlockMission()
-    print("nw-cartracker is available again for players. A player was doing the mission but left the server.")
+    print("["..GetCurrentResourceName().."]: Player that was in the mission left the server or got kicked, the mission is available again.")
 end)
 
 RegisterServerEvent("nw-cartracker:server:removeCarTrackerItem", function()
