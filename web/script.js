@@ -14,7 +14,7 @@ $(document).ready(function() {
     $(document).keyup(function(e) {
         if (e.key === "Escape") { // escape key maps to keycode `27`
             stopDisplayingContainer()
-            $.post('http://nw-cartracker/nw-cartracker:client:closeUI')
+            $.post('https://nw-cartracker/nw-cartracker:client:closeUI')
         }
     });
 });
@@ -25,10 +25,10 @@ function OpenShopCartracker() {
 
 function giveCarTracker() {
     $(".container").slideUp(1000);
-    $.post('http://nw-cartracker/nw-cartracker:client:giveCarTracker')
+    $.post('https://nw-cartracker/nw-cartracker:client:giveCarTracker')
 }
 
 function stopDisplayingContainer() {
     $(".container").slideUp(1000);
-    $.post('http://nw-cartracker/nw-cartracker:client:closeUI')
+    $.post('https://nw-cartracker/nw-cartracker:client:closeUI')
 }

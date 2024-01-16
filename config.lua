@@ -1,5 +1,7 @@
 NW = {}
 
+NW.Debug = true
+
 NW.Notifies = {
     ["NotifyTitle"] = "Missionboss",
     ["NotifyPosition"] = 'center-right',
