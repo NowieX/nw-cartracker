@@ -1,3 +1,9 @@
+function DebugPrinter(message)
+    if NW.Debug then 
+        print("^1["..GetCurrentResourceName().."]: ^4"..message)
+    end
+end
+
 local playersInMission = {
     locked = false
 }
@@ -16,7 +22,7 @@ end
 
 RegisterNetEvent('esx:playerDropped', function(playerId, reason)
     unlockMission()
-    print("["..GetCurrentResourceName().."]: Player that was in the mission left the server or got kicked, the mission is available again.")
+    DebugPrinter("Player that was in the mission left the server or got kicked, the mission is available again.")
 end)
 
 RegisterServerEvent("nw-cartracker:server:removeCarTrackerItem", function()
@@ -25,28 +31,33 @@ RegisterServerEvent("nw-cartracker:server:removeCarTrackerItem", function()
     local trackerItem = NW.TrackerItem
 
     xPlayer.removeInventoryItem(trackerItem.item, trackerItem.amount)
+    DebugPrinter("Removed cartracker inventory item.")
 end)
 
 RegisterServerEvent('nw-cartracker:server:spawnVehicleToPutTrackerOn', function(randomSpawnLocation)
     local src = source
     local model = NW.VehicleModel.vehicle
     
+    DebugPrinter("Creating cartracker vehicle.")
     ESX.OneSync.SpawnVehicle(model, randomSpawnLocation.coords, randomSpawnLocation.heading, {fuelLevel = 0}, function(NetworkId)
         local getEntityId = NetworkGetEntityFromNetworkId(NetworkId)
         SetVehicleDoorsLocked(getEntityId, 2)
         TriggerClientEvent('nw-cartracker:client:addZoneForVehicle', src, randomSpawnLocation, NetworkId)
     end)
+    DebugPrinter("Cartracker vehicle created.")
 end)
 
 function RemoveVehicle(vehicle)
     Wait(500)
     local getEntityId = NetworkGetEntityFromNetworkId(vehicle)
     DeleteEntity(getEntityId)
+    DebugPrinter("Deleted cartracker vehicle.")
 end
 
 RegisterServerEvent('nw-cartracker:server:playerCashOut', function(randomSpawnLocation, vehicle)
     local src = source
     local xPlayer = ESX.GetPlayerFromId(src)
+    DebugPrinter("Starting player cash out right now.")
     TriggerClientEvent('ox_lib:notify', src, {
         title = NW.Notifies["NotifyTitle"],
         description = NW.Translations["getAwayAndPaid"], 
@@ -62,6 +73,7 @@ RegisterServerEvent('nw-cartracker:server:playerCashOut', function(randomSpawnLo
 
         if distance > (NW.Paying.range) then
             xPlayer.addAccountMoney(NW.Paying.payout.account, NW.Paying.payout.amount)
+            DebugPrinter("Player cashed out.")
             TriggerClientEvent('ox_lib:notify', src, {
                 title = NW.Notifies["NotifyTitle"],
                 description = NW.Translations["getPaid"], 
@@ -73,8 +85,10 @@ RegisterServerEvent('nw-cartracker:server:playerCashOut', function(randomSpawnLo
             unlockMission()
             RemoveVehicle(vehicle)
             TriggerClientEvent('nw-cartracker:client:RemovePoliceBlip', src)
+            DebugPrinter("Removed police blip.")
             if NW.Paying.discordMessage.enabled then 
                 sendDiscordMessage(NW.Paying.discordMessage.message, NW.Paying.discordMessage.webhookURL)
+                DebugPrinter("Discord message sent.")
             end
             return
         end
@@ -104,8 +118,10 @@ RegisterServerEvent('nw-cartracker:server:giveCarTrackerItem', function()
             return
         end
     
+        DebugPrinter("Gave player cartracker item.")
         xPlayer.addInventoryItem(carTrackerItem.item, carTrackerItem.amount)
         TriggerClientEvent('nw-cartracker:client:startMission', src)
+        DebugPrinter("Starting mission right now.")
     else
         TriggerClientEvent('ox_lib:notify', source, {description = NW.Translations["noPolice"], duration = NW.Notifies["NotifyTimer"], position = NW.Notifies["NotifyPosition"], type = 'error', icon = 'fa fa-handcuffs', })
     end
@@ -115,6 +131,7 @@ RegisterServerEvent('nw-cartracker:server:PoliceNotification', function(randomSp
     local source = source
     local PolicePlayers = ESX.GetExtendedPlayers('job', 'police')
         
+    DebugPrinter("Creating police notification.")
     for i = 1, #(PolicePlayers) do
         local policePlayer = PolicePlayers[i]
         TriggerClientEvent('ox_lib:notify', source, {
@@ -125,6 +142,7 @@ RegisterServerEvent('nw-cartracker:server:PoliceNotification', function(randomSp
             type = 'warning', 
             icon = 'fa fa-bell'})
         TriggerClientEvent('nw-cartracker:client:PoliceBlip', policePlayer.source, randomSpawnLocation)
+        DebugPrinter("Sent out police notification.")
     end
 end)
 
