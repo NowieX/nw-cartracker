@@ -27,7 +27,6 @@ files {
 	"web/index.html",
 	"web/style.css",
 	"web/script.js",
-	"web/cartracker.png",
 }
 
 escrow_ignore {

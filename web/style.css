@@ -21,7 +21,7 @@ svg {
     margin: 10px;
     left: 63%;
     transition: fill 250ms ease;
-    transition: transform 500ms ease;
+    transition: transform 500ms ease, fill 250ms ease;
 }
 
 svg:hover {
