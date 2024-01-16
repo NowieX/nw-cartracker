@@ -1,7 +1,7 @@
 NW = {}
 
 NW.Notifies = {
-    ["NotifyTitle"] = "Anonymous Missionboss",
+    ["NotifyTitle"] = "Missionboss",
     ["NotifyPosition"] = 'center-right',
     ["NotifyTimer"] = 7500,
 }
