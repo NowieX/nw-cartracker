@@ -1,0 +1,60 @@
+body {
+    font-family: 'Noto Sans', sans-serif;
+    margin: 0 auto;
+    max-width: 600px;
+}
+
+.container {
+    margin-top: 37%;
+    border-radius: 10px;
+    overflow: hidden;
+    background-image: linear-gradient(to top, #2E5266, #6E8898);
+}
+
+header {
+    text-align: center;
+    padding: 5px;
+}
+
+svg {
+    position: absolute;
+    margin: 10px;
+    left: 63%;
+    transition: fill 250ms ease;
+    transition: transform 500ms ease;
+}
+
+svg:hover {
+    transform: rotate(180deg);
+    fill: white;
+    cursor: pointer;
+}
+
+.content {
+    text-align: center;
+}
+
+.description {
+    padding: 20px;
+    background-image: linear-gradient(to bottom, #9FB1BC, #D3D0CB);
+    margin-left: 20px;
+    margin-right: 20px;
+    border-radius: 10px;
+}
+
+.purchase-button {
+    margin: 20px;
+    outline: none;
+    border: none;
+    padding: 10px;
+    font-size: 20px;
+    border-radius: 5px;
+    background-color: #3da7e9;
+    transition: background-color 500ms ease, color 500ms ease, scale 500ms ease;
+}
+
+.purchase-button:hover {
+    background-color: #177ab8;
+    cursor: pointer;
+    scale: 1.1;
+}
