@@ -1,12 +1,23 @@
-function DebugPrinter(message)
+local playersInMission = {
+    locked = false
+}
+
+local function DebugPrinter(message)
     if NW.Debug then 
         print("^1["..GetCurrentResourceName().."]: ^4"..message)
     end
 end
 
-local playersInMission = {
-    locked = false
-}
+local function unlockMission()
+    playersInMission.locked = false
+end
+
+local function RemoveVehicle(vehicle)
+    Wait(500)
+    local getEntityId = NetworkGetEntityFromNetworkId(vehicle)
+    DeleteEntity(getEntityId)
+    DebugPrinter("Deleted cartracker vehicle.")
+end
 
 RegisterServerEvent('nw-cartracker:server:PrintToServer', function()
     print("Script made by: ^5NW Scripts®^0, ^6discord: https://discord.gg/JrKzCqJJjQ")
@@ -15,10 +26,6 @@ end)
 RegisterServerEvent('nw-cartracker:server:lockMission', function()
     playersInMission.locked = true
 end)
-
-function unlockMission()
-    playersInMission.locked = false
-end
 
 RegisterNetEvent('esx:playerDropped', function(playerId, reason)
     unlockMission()
@@ -46,13 +53,6 @@ RegisterServerEvent('nw-cartracker:server:spawnVehicleToPutTrackerOn', function(
     end)
     DebugPrinter("Cartracker vehicle created.")
 end)
-
-function RemoveVehicle(vehicle)
-    Wait(500)
-    local getEntityId = NetworkGetEntityFromNetworkId(vehicle)
-    DeleteEntity(getEntityId)
-    DebugPrinter("Deleted cartracker vehicle.")
-end
 
 RegisterServerEvent('nw-cartracker:server:playerCashOut', function(randomSpawnLocation, vehicle)
     local src = source
