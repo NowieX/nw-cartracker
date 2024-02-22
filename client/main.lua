@@ -1,6 +1,49 @@
-function DebugPrinter(message)
+local function DebugPrinter(message)
     if NW.Debug then 
         print("^1["..GetCurrentResourceName().."]: ^4"..message)
+    end
+end
+
+local function CreateBlip(data)
+    DebugPrinter("Creating cartracker blip.")
+    carTrackerBlip = AddBlipForCoord(data.coords)
+
+	SetBlipSprite(carTrackerBlip, NW.BlipInformation["CartrackerBlip"].Sprite)
+	SetBlipColour(carTrackerBlip, NW.BlipInformation["CartrackerBlip"].Colour)
+	SetBlipAsShortRange(carTrackerBlip, true)
+	SetBlipScale(carTrackerBlip, NW.BlipInformation["CartrackerBlip"].Scale)
+    SetBlipRoute(carTrackerBlip, true)
+
+	BeginTextCommandSetBlipName('STRING')
+	AddTextComponentSubstringPlayerName(NW.BlipInformation["CartrackerBlip"].Translation)
+	EndTextCommandSetBlipName(carTrackerBlip)
+    DebugPrinter("Cartracker blip created.")
+end
+
+local function CreateVehicle(randomSpawnLocation, vehicle)
+    while true do
+        Wait(2500) 
+        local player = PlayerPedId()
+        local playerCoords = GetEntityCoords(player)
+        local distance = #(randomSpawnLocation.coords - playerCoords)
+
+        if distance < 50 then
+            local networkId = NetworkGetNetworkIdFromEntity(vehicle)
+            exports.ox_target:addEntity(networkId, {
+                {
+                    label = NW.VehicleModel.targetText,
+                    name = "placeCarTracker",
+                    distance = NW.VehicleModel.targetDistance,
+                    onSelect = function()
+                        TriggerEvent('nw-cartracker:client:startPlacingTracker', networkId, randomSpawnLocation, vehicle)
+                    end,
+                    icon = 'fa fa-microchip',
+                    bones = NW.VehicleModel.targetBone,
+                }
+            })
+            DebugPrinter("Entity zone created for the vehicle.")
+            break
+        end
     end
 end
 
@@ -106,33 +149,6 @@ AddEventHandler('nw-cartracker:client:addZoneForVehicle', function(randomSpawnLo
     CreateVehicle(randomSpawnLocation, vehicle)
 end)
 
-function CreateVehicle(randomSpawnLocation, vehicle)
-    while true do
-        Wait(2500) 
-        local player = PlayerPedId()
-        local playerCoords = GetEntityCoords(player)
-        local distance = #(randomSpawnLocation.coords - playerCoords)
-
-        if distance < 50 then
-            local networkId = NetworkGetNetworkIdFromEntity(vehicle)
-            exports.ox_target:addEntity(networkId, {
-                {
-                    label = NW.VehicleModel.targetText,
-                    name = "placeCarTracker",
-                    distance = NW.VehicleModel.targetDistance,
-                    onSelect = function()
-                        TriggerEvent('nw-cartracker:client:startPlacingTracker', networkId, randomSpawnLocation, vehicle)
-                    end,
-                    icon = 'fa fa-microchip',
-                    bones = NW.VehicleModel.targetBone,
-                }
-            })
-            DebugPrinter("Entity zone created for the vehicle.")
-            break
-        end
-    end
-end
-
 RegisterNetEvent('nw-cartracker:client:startPlacingTracker')
 AddEventHandler('nw-cartracker:client:startPlacingTracker', function(networkId, randomSpawnLocation, vehicle)
     DebugPrinter("Police is notified right now.")
@@ -197,21 +213,5 @@ AddEventHandler('nw-cartracker:client:RemovePoliceBlip', function()
     RemoveBlip(PoliceBlip)
     DebugPrinter("Removed police blip.")
 end)
-
-function CreateBlip(data)
-    DebugPrinter("Creating cartracker blip.")
-    carTrackerBlip = AddBlipForCoord(data.coords)
-
-	SetBlipSprite(carTrackerBlip, NW.BlipInformation["CartrackerBlip"].Sprite)
-	SetBlipColour(carTrackerBlip, NW.BlipInformation["CartrackerBlip"].Colour)
-	SetBlipAsShortRange(carTrackerBlip, true)
-	SetBlipScale(carTrackerBlip, NW.BlipInformation["CartrackerBlip"].Scale)
-    SetBlipRoute(carTrackerBlip, true)
-
-	BeginTextCommandSetBlipName('STRING')
-	AddTextComponentSubstringPlayerName(NW.BlipInformation["CartrackerBlip"].Translation)
-	EndTextCommandSetBlipName(carTrackerBlip)
-    DebugPrinter("Cartracker blip created.")
-end
 
 TriggerServerEvent('nw-cartracker:server:PrintToServer')
