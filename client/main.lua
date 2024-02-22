@@ -157,7 +157,6 @@ AddEventHandler('nw-cartracker:client:startPlacingTracker', function(networkId, 
     exports.ox_target:removeEntity(networkId, "placeCarTracker")
     DebugPrinter("Removed entity zone of the vehicle.")
 
-    -- inspecteren van de tracker plaats en daarna animatie van plaatsen doen
     DebugPrinter("Starting progressbars right now.")
     lib.progressBar(
         {
